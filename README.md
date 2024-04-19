@@ -1,1 +1,1 @@
-# MyPublicProject
+# This is a public repository
