@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      #clock {
+        width: 200px;
+        height: 200px;
+        border: 10px solid #000;
+        border-radius: 50%;
+        position: relative;
+      }
+      #hour {
+        width: 6px;
+        height: 50px;
+        background: red;
+        position: absolute;
+        top: 50px;
+        left: 99px;
+        transform-origin: bottom center;
+      }
+      #minute {
+        width: 4px;
+        height: 80px;
+        background: yellow;
+        position: absolute;
+        top: 20px;
+        left: 99px;
+        transform-origin: bottom center;
+      }
+      #second {
+        width: 1px;
+        height: 90px;
+        background: blue;
+        position: absolute;
+        top: 10px;
+        left: 99.5px;
+        transform-origin: bottom center;
+      }
+      #clock-time {
+        position: absolute;
+        bottom: -40px;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="clock">
+      <div id="hour"></div>
+      <div id="minute"></div>
+      <div id="second"></div>
+      <div id="clock-time">00:00:00</div>
+    </div>
+    <script>
+      function setRotation(element, degrees) {
+        element.style.transform = "rotate(" + degrees + "deg)";
+      }
+      function updateClock() {
+        let currentTime = new Date();
+        let year = currentTime.getFullYear();
+        let month = currentTime.getMonth() + 1;
+        let day = currentTime.getDate();
+        let hours = currentTime.getHours();
+        let minutes = currentTime.getMinutes();
+        let seconds = currentTime.getSeconds();
+
+        setRotation(
+          document.getElementById("hour"),
+          (hours % 12) * 30 + minutes / 2
+        );
+        setRotation(
+          document.getElementById("minute"),
+          minutes * 6 + seconds / 10
+        );
+        setRotation(document.getElementById("second"), seconds * 6);
+
+        document.getElementById("clock-time").innerText =
+          year +
+          "-" +
+          ("0" + month).slice(-2) +
+          "-" +
+          ("0" + day).slice(-2) +
+          " " +
+          ("0" + hours).slice(-2) +
+          ":" +
+          ("0" + minutes).slice(-2) +
+          ":" +
+          ("0" + seconds).slice(-2);
+      }
+      setInterval(updateClock, 1000);
+    </script>
+  </body>
+</html>
