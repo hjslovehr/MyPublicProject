@@ -1,102 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>time</title>
     <style>
+      html,
       body {
-        background-color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
+          margin: 0;
+          height: 100%;
       }
-      #clock {
-        width: 200px;
-        height: 200px;
-        border: 10px solid #000;
-        border-radius: 50%;
-        position: relative;
+
+      svg#clock {
+          display: block;
+          margin: 0 auto;
+
+          font-family: 'Lobster';
+          background-color: #0F0F0F;
       }
-      #hour {
-        width: 6px;
-        height: 50px;
-        background: red;
-        position: absolute;
-        top: 50px;
-        left: 99px;
-        transform-origin: bottom center;
+
+
+      #clockface {
+          fill: #222;
       }
-      #minute {
-        width: 4px;
-        height: 80px;
-        background: yellow;
-        position: absolute;
-        top: 20px;
-        left: 99px;
-        transform-origin: bottom center;
+
+      #marks5 use {
+          stroke: #444;
+          stroke-width: 1;
       }
-      #second {
-        width: 1px;
-        height: 90px;
-        background: blue;
-        position: absolute;
-        top: 10px;
-        left: 99.5px;
-        transform-origin: bottom center;
+
+      #marks5 use:first-child {
+          stroke: #FFF;
       }
-      #clock-time {
-        position: absolute;
-        bottom: -40px;
-        width: 100%;
-        text-align: center;
-        color: #fff;
+
+      #date-display rect {
+          stroke: #444;
+          stroke-width: 1;
+      }
+
+      #date-display text {
+          fill: #444;
+          font-size: 0.35em;
+      }
+
+      #hand line,
+      #mark-minute {
+          stroke-linecap: round;
+      }
+
+      #hand {
+          fill: #FFF;
+          stroke: #FFF;
+      }
+
+      #hour-hand {
+          stroke-width: 4;
+          transform: scale(0.6);
+          animation: animate-hours 86400s linear infinite;
+      }
+
+      #minute-hand {
+          stroke-width: 2;
+          animation: animate-minutes 3600s linear infinite;
+      }
+
+      #second-hand {
+          stroke-width: 1;
+          transform: scale(1.1);
+          animation: animate-seconds 60s steps(60) infinite;
+      }
+
+
+      /* Animations */
+
+      @keyframes animate-hours {
+          from {
+              transform: scale(0.6) rotate(0deg);
+          }
+
+          to {
+              transform: scale(0.6) rotate(360deg);
+          }
+      }
+
+      @keyframes animate-minutes {
+          from {
+              transform: rotate(0deg);
+          }
+
+          to {
+              transform: rotate(360deg);
+          }
+      }
+
+      @keyframes animate-seconds {
+          from {
+              transform: scale(1.1) rotate(0deg);
+          }
+
+          to {
+              transform: scale(1.1) rotate(360deg);
+          }
       }
     </style>
   </head>
+
   <body>
-    <div id="clock">
-      <div id="hour"></div>
-      <div id="minute"></div>
-      <div id="second"></div>
-      <div id="clock-time">00:00:00</div>
-    </div>
+    <svg
+      id="clock"
+      version="1.1"
+      width="100%"
+      height="100%"
+      preserveAspectRatio="xMidYMid meet"
+      viewBox="-50 -50 100 100"
+    >
+      <defs>
+        <g id="clockface">
+          <circle cx="0" cy="0" r="49" />
+
+          <g id="mark-minute">
+            <line x1="0" y1="-44" x2="0" y2="-47" />
+          </g>
+          <g id="marks5">
+            <use xlink:href="#mark-minute" transform="rotate(0)" />
+            <use xlink:href="#mark-minute" transform="rotate(6)" />
+            <use xlink:href="#mark-minute" transform="rotate(12)" />
+            <use xlink:href="#mark-minute" transform="rotate(18)" />
+            <use xlink:href="#mark-minute" transform="rotate(24)" />
+          </g>
+
+          <use xlink:href="#marks5" transform="rotate(30)" />
+          <use xlink:href="#marks5" transform="rotate(60)" />
+          <use xlink:href="#marks5" transform="rotate(90)" />
+          <use xlink:href="#marks5" transform="rotate(120)" />
+          <use xlink:href="#marks5" transform="rotate(150)" />
+          <use xlink:href="#marks5" transform="rotate(180)" />
+          <use xlink:href="#marks5" transform="rotate(210)" />
+          <use xlink:href="#marks5" transform="rotate(240)" />
+          <use xlink:href="#marks5" transform="rotate(270)" />
+          <use xlink:href="#marks5" transform="rotate(300)" />
+          <use xlink:href="#marks5" transform="rotate(330)" />
+
+          <g id="date-display">
+            <rect x="23" y="-4" width="8" height="7.5" />
+            <text x="27" y="1.8" text-anchor="middle">00</text>
+          </g>
+        </g>
+
+        <g id="hand">
+          <line x1="0" y1="0" x2="0" y2="-40" />
+          <circle cx="0" cy="0" r="2" />
+        </g>
+      </defs>
+
+      <use xlink:href="#clockface" />
+
+      <g id="offset-hours">
+        <use id="hour-hand" xlink:href="#hand" />
+      </g>
+      <g id="offset-minutes">
+        <use id="minute-hand" xlink:href="#hand" />
+      </g>
+      <g id="offset-seconds">
+        <use id="second-hand" xlink:href="#hand" />
+      </g>
+    </svg>
+
     <script>
-      function setRotation(element, degrees) {
-        element.style.transform = "rotate(" + degrees + "deg)";
-      }
-      function updateClock() {
-        let currentTime = new Date();
-        let year = currentTime.getFullYear();
-        let month = currentTime.getMonth() + 1;
-        let day = currentTime.getDate();
-        let hours = currentTime.getHours();
-        let minutes = currentTime.getMinutes();
-        let seconds = currentTime.getSeconds();
+      window.onload = function () {
+        var time = new Date(),
+          midnight = new Date();
+        midnight.setHours(0);
+        midnight.setMinutes(0);
+        midnight.setSeconds(0);
 
-        setRotation(
-          document.getElementById("hour"),
-          (hours % 12) * 30 + minutes / 2
-        );
-        setRotation(
-          document.getElementById("minute"),
-          minutes * 6 + seconds / 10
-        );
-        setRotation(document.getElementById("second"), seconds * 6);
+        // Seconds/Minutes/Hours from today:
+        var seconds = (time.getTime() - midnight.getTime()) / 1000,
+          minutes = seconds / 60,
+          hours = minutes / 60;
 
-        document.getElementById("clock-time").innerText =
-          year +
-          "-" +
-          ("0" + month).slice(-2) +
-          "-" +
-          ("0" + day).slice(-2) +
-          " " +
-          ("0" + hours).slice(-2) +
-          ":" +
-          ("0" + minutes).slice(-2) +
-          ":" +
-          ("0" + seconds).slice(-2);
-      }
-      setInterval(updateClock, 1000);
+        document.getElementById("offset-hours").style.transform =
+          "rotate(" + ((hours % 12) / 12) * 360 + "deg)";
+        document.getElementById("offset-minutes").style.transform =
+          "rotate(" + (minutes / 60) * 360 + "deg)";
+        document.getElementById("offset-seconds").style.transform =
+          "rotate(" + (seconds / 60) * 360 + "deg)";
+
+        document
+          .getElementById("date-display")
+          .getElementsByTagName("text")[0].innerHTML = time.getDate();
+      };
     </script>
   </body>
 </html>
