@@ -13,140 +13,244 @@
       href="https://cdn.bootcdn.net/ajax/libs/bulma/1.0.0/css/bulma.min.css"
       rel="stylesheet"
     />
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-      .play-list-container {
-        /* nothing to do here */
+      .my-custom-player-button {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        margin-left: 0.5rem;
       }
-      .panel {
-        .play-list-container {
-          .panel-block {
-            cursor: pointer;
-          }
-        }
+
+      #playerList .panel-block {
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <script></script>
-
-    <div class="container">
-      <header class="title is-1 mt-4 has-text-centered">
-        Welcome to Music Player
-      </header>
-      <main class="panel is-primary">
-        <div class="panel-heading">
-          <div class="level is-mobile">
-            <div class="level-left">
-              <div class="level-left">List of Songs</div>
-            </div>
-            <div class="level-right">
-              <div class="level-rihgt"></div>
+    <div id="app">
+      <h1 class="title is-1 mt-4 has-text-centered">{{ title }}</h1>
+      <div class="container">
+        <article class="panel is-primary">
+          <p class="panel-heading">Player List</p>
+          <p class="panel-tabs"></p>
+          <div id="playerList">
+            <div
+              @click="play(song.src)"
+              v-for="(song, index) in songs"
+              :key="index"
+              class="panel-block"
+            >
+              <span>{{ song.name }}</span>
             </div>
           </div>
-        </div>
-        <div class="panel-tabs">
-          <div class="level is-mobile m-2">
-            <div class="level-left">
-              <div class="level-item">
-                <p class="control">
-                  <button class="button is-small is-primary" id="btnPlay">
-                    PLAY
+        </article>
+        <div class="hero is-dark has-text-centered">
+          <div class="hero-body">
+            <div class="block">{{ currentSong.name }}</div>
+            <div class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">
+                  <button
+                    title="previous"
+                    class="button my-custom-player-button is-rounded is-primary"
+                    @click="previous"
+                  >
+                    ◁
                   </button>
-                  <button class="button is-small is-primary" id="btnStop">
-                    STOP
+                  <button
+                    title="next"
+                    class="button my-custom-player-button is-rounded is-primary"
+                    @click="next"
+                  >
+                    ▷
                   </button>
-                </p>
+                </div>
+                <div class="level-item has-text-centered" title="list loop">
+                  <input type="checkbox" id="autoplay" v-model="loop" />
+                  <label for="autoplay" style="padding-top: 5px">
+                    <span class="ml-1"></span>
+                    <svg
+                      t="1717046936531"
+                      class="icon"
+                      viewBox="0 0 1024 1024"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      p-id="2579"
+                      width="16"
+                      height="16"
+                    >
+                      <path
+                        d="M128 320h640v192l256-256-256-256v192H0v384h128z m768 384H256V512l-256 256 256 256v-192h768V448h-128z"
+                        p-id="2580"
+                        fill="#00D1B2"
+                      ></path></svg
+                  ></label>
+                </div>
               </div>
-            </div>
-            <div class="level-right">
-              <div class="level-item"></div>
+              <audio id="audioPlayer" controls></audio>
             </div>
           </div>
         </div>
-        <div class="play-list-container">
-          <div
-            class="panel-block"
-            data-song="./static/music/やまだ豊 - やわらかな光.mp3"
-          >
-            柔和之光
-          </div>
-          <div
-            class="panel-block"
-            data-song="./static/music/宫崎骏-天空之城.flac"
-          >
-            天空之城
-          </div>
-          <div
-            class="panel-block"
-            data-song="./static/music/Don't Leave Now - Dan Phillipson.mp3"
-          >
-            Don't Leave Now
-          </div>
-          <div
-            class="panel-block"
-            data-song="./static/music/Sia - Unstoppable.mp3"
-          >
-            Unstoppable
-          </div>
-          <div
-            class="panel-block"
-            data-song="./static/music/Sia-Chandelier.mp3"
-          >
-            Chandelier
-          </div>
-          <div
-            class="panel-block"
-            data-song="./static/music/许巍 - 此时此刻.mp3"
-          >
-            此时此刻
-          </div>
-          <div
-            class="panel-block"
-            data-song="./static/music/五月天-如果我们不曾相遇.flac"
-          >
-            如果我们不曾相遇
-          </div>
-        </div>
-      </main>
+      </div>
     </div>
 
     <script>
-      const playerOptions = {
-        volume: 1.0,
-        loop: true,
-        src: "",
-      };
-      const player = new Audio();
-      player.loop = playerOptions.loop;
-      player.volume = playerOptions.volume;
-      player.src = playerOptions.src;
+      const app = Vue.createApp({
+        data() {
+          return {
+            title: "Welcome to Music Player",
+            audioPlayer: null,
+            songs: [],
+            currentSong: {},
+            currentSongIndex: -1,
+            loop: true,
+            autoplay: false,
+          };
+        },
+        watch: {
+          currentSongIndex(val) {
+            this.currentSong = this.songs[val];
+          },
+          autoplay(val) {
+            this.audioPlayer.autoplay = val;
+          },
+        },
+        methods: {
+          init() {
+            console.log("init");
+            this.initAudioPlayer();
+            this.initSongs();
+            this.initSongList();
 
-      document.querySelectorAll(".panel-block").forEach((item) => {
-        item.addEventListener("click", (e) => playSong(e.target));
+            this.currentSongIndex = 0;
+            this.audioPlayer.src = this.songs[this.currentSongIndex].src;
+
+            console.log(this.audioPlayer.src);
+          },
+          initAudioPlayer() {
+            this.audioPlayer = document.getElementById("audioPlayer");
+            this.audioPlayer.addEventListener("play", (e) => {
+              console.log("play");
+            });
+            this.audioPlayer.addEventListener("pause", (e) => {
+              console.log("pause");
+            });
+            this.audioPlayer.addEventListener("ended", this.ended);
+
+            this.audioPlayer.volume = 0.5;
+          },
+          initSongs() {
+            this.songs = [
+              {
+                name: "柔和之光",
+                src: "./static/music/柔和之光.mp3",
+              },
+              {
+                name: "天空之城",
+                src: "./static/music/宫崎骏-天空之城.flac",
+              },
+              {
+                name: "Don't Leave Now",
+                src: "./static/music/Don't Leave Now - Dan Phillipson.mp3",
+              },
+              {
+                name: "Unstoppable",
+                src: "./static/music/Sia - Unstoppable.mp3",
+              },
+              {
+                name: "如果我们不曾相遇",
+                src: "./static/music/五月天-如果我们不曾相遇.flac",
+              },
+              {
+                name: "此时此刻",
+                src: "./static/music/许巍 - 此时此刻.mp3",
+              },
+            ];
+          },
+          initSongList() {},
+          play(e) {
+            console.log("play");
+
+            this.currentSongIndex = this.songs.findIndex(
+              (song) => song.src === e
+            );
+            this.audioPlayer.src = e;
+            this.audioPlayer.play();
+          },
+          stop(e) {
+            console.log("stop");
+          },
+          pause(e) {
+            console.log("pause");
+          },
+          previous(e) {
+            console.log("previous");
+            if (this.currentSongIndex > 0) {
+              this.currentSongIndex--;
+            } else {
+              this.currentSongIndex = this.songs.length - 1;
+            }
+
+            this.audioPlayer.src = this.songs[this.currentSongIndex].src;
+            this.audioPlayer.play();
+          },
+          next(e) {
+            console.log("next");
+            if (this.currentSongIndex < this.songs.length - 1) {
+              this.currentSongIndex++;
+            } else {
+              this.currentSongIndex = 0;
+            }
+
+            this.audioPlayer.src = this.songs[this.currentSongIndex].src;
+            this.audioPlayer.play();
+          },
+          ended(e) {
+            console.log("ended");
+            if (this.loop) {
+              this.next();
+            }
+          },
+          setAutoplay() {
+            this.autoplay = !this.autoplay;
+            this.auduioPlayer.autoplay = this.autoplay;
+          },
+          setLoop() {
+            this.loop = !this.loop;
+            this.auduioPlayer.loop = this.loop;
+          },
+        },
+        beforeCreate() {
+          console.log("beforeCreate");
+        },
+        created() {
+          console.log("created");
+        },
+        beforeMount() {
+          console.log("beforeMount");
+        },
+        mounted() {
+          console.log("mounted");
+
+          this.init();
+        },
+        beforeUpdate() {
+          // console.log("beforeUpdate");
+        },
+        updated() {
+          // console.log("updated");
+        },
+        beforeUnmount() {
+          // console.log("beforeUnmount");
+        },
+        unmounted() {
+          // console.log("unmounted");
+        },
       });
 
-      function playSong(e) {
-        player.pause();
-        const song = e.attributes["data-song"].value;
-        console.log(song);
-        playerOptions.src = song;
-        player.src = song;
-        player.play();
-      }
-
-      document.getElementById("btnStop").addEventListener("click", (e) => {
-        if (player) {
-          player.pause();
-        }
-      });
-
-      document.getElementById("btnPlay").addEventListener("click", (e) => {
-        console.log(playerOptions.src);
-        if (player) {
-          player.src = playerOptions.src;
-          player.play();
-        }
-      });
+      app.mount("#app");
     </script>
   </body>
 </html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>music player</title>
+    <link
+      rel="shortcut icon"
+      href="./static/images/icons/music-logo.svg"
+      type="image/x-icon"
+    />
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/bulma/1.0.0/css/bulma.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .play-list-container {
+        /* nothing to do here */
+      }
+      .panel {
+        .play-list-container {
+          .panel-block {
+            cursor: pointer;
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <script></script>
+
+    <div class="container">
+      <header class="title is-1 mt-4 has-text-centered">
+        Welcome to Music Player
+      </header>
+      <main class="panel is-primary">
+        <div class="panel-heading">
+          <div class="level is-mobile">
+            <div class="level-left">
+              <div class="level-left">List of Songs</div>
+            </div>
+            <div class="level-right">
+              <div class="level-rihgt"></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-tabs">
+          <div class="level is-mobile m-2">
+            <div class="level-left">
+              <div class="level-item">
+                <p class="control">
+                  <button class="button is-small is-primary" id="btnPlay">
+                    PLAY
+                  </button>
+                  <button class="button is-small is-primary" id="btnStop">
+                    STOP
+                  </button>
+                </p>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item"></div>
+            </div>
+          </div>
+        </div>
+        <div class="play-list-container">
+          <div
+            class="panel-block"
+            data-song="./static/music/やまだ豊 - やわらかな光.mp3"
+          >
+            柔和之光
+          </div>
+          <div
+            class="panel-block"
+            data-song="./static/music/宫崎骏-天空之城.flac"
+          >
+            天空之城
+          </div>
+          <div
+            class="panel-block"
+            data-song="./static/music/Don't Leave Now - Dan Phillipson.mp3"
+          >
+            Don't Leave Now
+          </div>
+          <div
+            class="panel-block"
+            data-song="./static/music/Sia - Unstoppable.mp3"
+          >
+            Unstoppable
+          </div>
+          <div
+            class="panel-block"
+            data-song="./static/music/Sia-Chandelier.mp3"
+          >
+            Chandelier
+          </div>
+          <div
+            class="panel-block"
+            data-song="./static/music/许巍 - 此时此刻.mp3"
+          >
+            此时此刻
+          </div>
+          <div
+            class="panel-block"
+            data-song="./static/music/五月天-如果我们不曾相遇.flac"
+          >
+            如果我们不曾相遇
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const playerOptions = {
+        volume: 1.0,
+        loop: true,
+        src: "",
+      };
+      const player = new Audio();
+      player.loop = playerOptions.loop;
+      player.volume = playerOptions.volume;
+      player.src = playerOptions.src;
+
+      document.querySelectorAll(".panel-block").forEach((item) => {
+        item.addEventListener("click", (e) => playSong(e.target));
+      });
+
+      function playSong(e) {
+        player.pause();
+        const song = e.attributes["data-song"].value;
+        console.log(song);
+        playerOptions.src = song;
+        player.src = song;
+        player.play();
+      }
+
+      document.getElementById("btnStop").addEventListener("click", (e) => {
+        if (player) {
+          player.pause();
+        }
+      });
+
+      document.getElementById("btnPlay").addEventListener("click", (e) => {
+        console.log(playerOptions.src);
+        if (player) {
+          player.src = playerOptions.src;
+          player.play();
+        }
+      });
+    </script>
+  </body>
+</html>
