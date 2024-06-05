@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+    <h1 align="center">Test</h1>
+    <div id="data"></div>
+
+    <script>
+        let response = await fetch("https://hjslovehr.github.io/87083690-a0e2-4d63-aa94-e6a43de2437b/static/images/images");
+        let result = await response.text();
+
+        console.log(result);
+
+        document.getElementById("data").innerHTML = result;
+    </script>
+</body>
+</html>
