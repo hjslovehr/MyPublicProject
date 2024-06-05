@@ -11,7 +11,7 @@
 
     <script>
         let response = await fetch("https://hjslovehr.github.io/87083690-a0e2-4d63-aa94-e6a43de2437b/static/images/images");
-        let result = await response.text();
+        let result = await response.body.text();
 
         console.log(result);
 
