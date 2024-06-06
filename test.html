@@ -19,15 +19,18 @@
 
       return response.text();
     }
+
+    const baseUrl = "https://hjslovehr.github.io/87083690-a0e2-4d63-aa94-e6a43de2437b/static/images/";
+
     fetchData().then((data) => {
       console.log(data);
 
       const arr = JSON.parse(data);
       const container = document.getElementById("container");
       arr.forEach((item) => {
-        const div = document.createElement("div");
-        div.innerHTML = item;
-        container.appendChild(div);
+        const img = document.createElement("img");
+        img.src = `${baseUrl}${item}`;
+        container.appendChild(img);
       });
     });
   </script>
