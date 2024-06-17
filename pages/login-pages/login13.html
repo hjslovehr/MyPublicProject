@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #223243;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        width: 330px;
+        height: 420px;
+        padding: 10px;
+        box-shadow: -5px -5px 15px #ffffff1a, 5px 5px 15px #00000059,
+          inset -5px -5px 15px #ffffff1a, inset 5px 5px 15px #00000059;
+        border-radius: 20px;
+        border: 8px solid #223243;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container h2 {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        text-align: center;
+        color: white;
+      }
+      .section {
+        margin-top: 10%;
+        width: 80%;
+        height: 35px;
+        box-shadow: -5px -5px 15px #ffffff1a, 5px 5px 15px #00000038;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease-in-out;
+      }
+
+      #username.active,
+      #email.active,
+      #password.active,
+      #confirm-password.active,
+      #sign-in-email.active,
+      #sign-in-password.active {
+        box-shadow: inset -5px -5px 15px #ffffff1a, inset 5px 5px 15px #00000038;
+      }
+
+      .section i {
+        color: #6fe6e6;
+        width: 10%;
+        border-right: 2px solid #77dede;
+      }
+      .section input {
+        background: none;
+        border: none;
+        width: 80%;
+        height: 30px;
+        border-radius: 20px;
+        margin-left: 1%;
+        color: white;
+        font-family: cursive;
+        outline: none;
+        padding-left: 5px;
+        font-size: 15px;
+      }
+
+      .container .process-btn,
+      .sign-in .process-btn {
+        margin-top: 7%;
+        width: 80%;
+        height: 35px;
+        border-radius: 20px;
+        border: none;
+        background-color: #46fbfb;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        box-shadow: -4px -4px 10px #ffffff1a, 4px 4px 10px #0000002d;
+      }
+
+      .container p,
+      .sign-in p {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        margin-top: 3%;
+        color: #ffffff72;
+      }
+
+      .container p span,
+      .sign-in p span {
+        color: white;
+        cursor: pointer;
+      }
+      .container p span::after,
+      .sign-in p span::after {
+        content: "";
+        width: 0%;
+        height: 2px;
+        display: block;
+        background-color: white;
+      }
+
+      .container p span:hover::after {
+        width: 25%;
+        transition: width 0.3s ease-in-out;
+        margin-left: 76.5%;
+      }
+
+      /* Sign In */
+      .sign-in {
+        width: 330px;
+        height: 300px;
+        padding: 10px;
+        box-shadow: -5px -5px 15px #ffffff1a, 5px 5px 15px #00000059,
+          inset -5px -5px 15px #ffffff1a, inset 5px 5px 15px #00000059;
+        border-radius: 20px;
+        border: 8px solid #223243;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        display: none;
+      }
+
+      .sign-in h2 {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        color: white;
+      }
+
+      .sign-in p span:hover::after {
+        width: 52%;
+        transition: width 0.3s ease-in-out;
+        margin-left: 48.5%;
+      }
+
+      /* Make it responsive */
+      @media screen and (max-width: 362px) {
+        .container,
+        .sign-in {
+          width: 310px;
+        }
+      }
+
+      @media screen and (max-width: 338px) {
+        .container,
+        .sign-in {
+          width: 295px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sign Up -->
+    <div class="container">
+      <h2>Sign Up</h2>
+      <!-- Username section -->
+      <div class="section" id="username">
+        <i class="fa-regular fa-user"></i>
+        <input type="text" placeholder="username" />
+      </div>
+
+      <!-- Email section -->
+      <div class="section" id="email">
+        <i class="fa-regular fa-envelope"></i>
+        <input type="text" placeholder="email address" />
+      </div>
+
+      <!-- Password -->
+      <div class="section" id="password">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" placeholder="create password" />
+      </div>
+
+      <!-- Password -->
+      <div class="section" id="confirm-password">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" placeholder="confirm password" />
+      </div>
+
+      <!-- Create Account Button -->
+      <button class="process-btn" id="create-account">Create Account</button>
+
+      <!-- Link to go sign in screen -->
+      <p>Already a member? <span id="log">Log In</span></p>
+    </div>
+
+    <!-- Sign In -->
+    <div class="sign-in">
+      <h2>Sign In</h2>
+
+      <!-- Email section -->
+      <div class="section" id="sign-in-email">
+        <i class="fa-regular fa-envelope"></i>
+        <input type="text" placeholder="email address" />
+      </div>
+
+      <!-- Password -->
+      <div class="section" id="sign-in-password">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" placeholder="create password" />
+      </div>
+
+      <!-- Create Account Button -->
+      <button class="process-btn" id="login">Login</button>
+
+      <!-- Link to go create account screen -->
+      <p>Not Registered? <span id="sign">Create an account</span></p>
+    </div>
+
+    <script>
+      // function to add active class
+      const addActiveClass = (ele) => ele.classList.add("active");
+
+      // function to remove active class
+      const removeActiveClass = (ele) => ele.classList.remove("active");
+
+      // get input tags
+      const inputTags = document.querySelectorAll(".section");
+
+      // function to check where is active class
+      const checkActiveClass = () => {
+        for (let i = 0; i < inputTags.length; i++) {
+          if (inputTags[i].classList.contains("active")) {
+            removeActiveClass(inputTags[i]);
+            break;
+          }
+        }
+      };
+
+      // function to add click event and some operations
+      const addClickEvent = (ele) => {
+        ele.addEventListener("click", () => {
+          checkActiveClass();
+          addActiveClass(ele);
+        });
+      };
+
+      // get username area
+      const usernameArea = document.getElementById("username");
+
+      // add click event on username area
+      addClickEvent(usernameArea);
+
+      // get email area
+      const emailArea = document.getElementById("email");
+
+      // add click event on email area
+      addClickEvent(emailArea);
+
+      // get set password area
+      const setPasswordArea = document.getElementById("password");
+
+      // add click event on set password area
+      addClickEvent(setPasswordArea);
+
+      // get confirm password
+      const confirmPassword = document.getElementById("confirm-password");
+
+      // add click event on set password area
+      addClickEvent(confirmPassword);
+
+      // get create account button
+      const createAcccoutButton = document.getElementById("create-account");
+
+      // add click event on create account button
+      createAcccoutButton.addEventListener("click", () => {
+        checkActiveClass();
+        // For loop to remove filled values
+        for (
+          let i = 0;
+          i < document.querySelectorAll("input").length - 2;
+          i++
+        ) {
+          console.log(document.querySelectorAll("input")[i]);
+          document.querySelectorAll("input")[i].value = null;
+        }
+      });
+
+      // _________________________________________Sign In_______________________________________
+      // get log in link
+      const logInLink = document.getElementById("log");
+
+      // get sign in screen
+      const signInScreen = document.getElementsByClassName("sign-in")[0];
+
+      // get sign up screen
+      const signUpScreen = document.getElementsByClassName("container")[0];
+
+      // add click event on log link
+      logInLink.addEventListener("click", () => {
+        signUpScreen.style.display = "none";
+        signInScreen.style.display = "flex";
+      });
+
+      // get sign-in email area
+      const signInEmailArea = document.getElementById("sign-in-email");
+
+      // add click event on sign in email area
+      addClickEvent(signInEmailArea);
+
+      // get sign-in password
+      const signInCheckPassword = document.getElementById("sign-in-password");
+
+      // add click event on sign in passwoord area
+      addClickEvent(signInCheckPassword);
+
+      // get login button
+      const loginButton = document.getElementById("login");
+
+      // add click event on login button
+      loginButton.addEventListener("click", () => {
+        checkActiveClass();
+        document.querySelectorAll("input")[4].value = null;
+        document.querySelectorAll("input")[5].value = null;
+      });
+
+      // get create an account link
+      const createAccountLink = document.getElementById("sign");
+
+      // add click  event on create account link button
+      createAccountLink.addEventListener("click", () => {
+        signInScreen.style.display = "none";
+        signUpScreen.style.display = "flex";
+      });
+    </script>
+  </body>
+</html>
